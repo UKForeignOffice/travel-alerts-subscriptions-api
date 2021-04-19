@@ -1,0 +1,66 @@
+{
+  "name": "travel-alerts-subscriptions-api",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">=14"
+  },
+  "description": "Subscriptions API for FCDO Emergency Travel Alerts",
+  "scripts": {
+    "build": "babel src --out-dir dist --extensions \".ts,.tsx\"",
+    "start:prod": "node dist/index.js",
+    "start:dev": "node -r ts-node/register/transpile-only --inspect src/index.ts --debug src/index.ts",
+    "test": "jest --detectOpenHandles",
+    "test:coverage": "jest --coverage",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint ./src --fix && prettier --write ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UKForeignOffice/travel-alerts-subscriptions-api.git"
+  },
+  "author": "FCDO",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/UKForeignOffice/travel-alerts-subscriptions-api/issues"
+  },
+  "homepage": "https://github.com/UKForeignOffice/travel-alerts-subscriptions-api#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.15",
+    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.41",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-config-standard-with-typescript": "^20.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test && npm run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "npm run lint",
+      "git add"
+    ]
+  }
+}
