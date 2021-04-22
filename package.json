@@ -15,7 +15,9 @@
     "lint": "eslint ./src --fix && prettier --write ./src",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:setup": "npm run db:generate && prisma migrate dev --name init && prisma db seed --preview-feature"
+    "db:setup": "npm run db:generate && prisma migrate dev --name init && prisma db seed --preview-feature",
+    "prepare": "husky install",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -60,12 +62,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "joi": "^17.4.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm test && npm run type-check"
-    }
   },
   "lint-staged": {
     "*.{ts,tsx}": [
