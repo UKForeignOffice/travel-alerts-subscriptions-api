@@ -35,11 +35,9 @@ model Message {
 
 model Subscription {
   id      Int      @default(autoincrement()) @id
-  emailAddress   String?
-  isEmailVerified   Boolean @default(false)
-  phoneNumber   String?
-  phonePrefix   String?
-  isPhoneVerified   Boolean @default(false)
+  recipientId   String
+  recipientIdPrefix   String?
+  isRecipientIdVerified   Boolean @default(false)
   channel   Channel    @relation(fields: [channelId], references: [id])
   channelId  String
   country   Country    @relation(fields: [countryCode], references: [code])
@@ -49,16 +47,28 @@ model Subscription {
   lastUpdatedDate DateTime? @default(now())
   unsubscribeReason UnsubscribeReason?    @relation(fields: [unsubscribeReasonId], references: [id])
   unsubscribeReasonId  Int?
+  messages  Message[]
+  subscriberSubscription    SubscriberSubscription[]
+}
+
+model Subscriber {
+  id     Int      @default(autoincrement()) @id
   isBritishNational   Boolean
   isGlobalSubscriber   Boolean? @default(false)
-  messages  Message[]
+  subscriberSubscription    SubscriberSubscription[]
+}
+
+model SubscriberSubscription {
+  subscriber        Subscriber     @relation(fields: [subscriberId], references: [id])
+  subscriberId      Int
+  subscription        Subscription     @relation(fields: [subscriptionId], references: [id])
+  subscriptionId      Int
+  @@id([subscriberId, subscriptionId])
 }
 
 model Staff {
   id      Int      @default(autoincrement()) @id
   emailAddress  String
-  firstName String
-  givenName String
   role  StaffRole    @relation(fields: [roleId], references: [id])
   roleId  Int
   alerts Alert[]

@@ -4,14 +4,16 @@ import { logger } from "../../logger";
 const prisma = new PrismaClient();
 
 async function main() {
-  const country = await prisma.country.create({
-    data: {
-      code: "GB",
-      name: "Great Britain",
-      slug: "great-britain",
-    },
+  await prisma.country.createMany({
+    data: [
+      {
+        code: "IN",
+        name: "India",
+        slug: "india",
+      },
+    ],
   });
-  const channel = await prisma.channel.createMany({
+  await prisma.channel.createMany({
     data: [
       {
         id: Channel.Email,
@@ -23,7 +25,23 @@ async function main() {
       },
     ],
   });
-  logger.info({ country, channel });
+  await prisma.unsubscribeReasonCategory.createMany({
+    data: [
+      {
+        description: "My trip to the country is finished",
+      },
+      {
+        description: "The alert message contents weren't useful to me",
+      },
+      {
+        description: "An unsubscribe date was set when subscribing",
+      },
+    ],
+  });
+  const categories = await prisma.unsubscribeReasonCategory.findMany();
+  await prisma.unsubscribeReason.createMany({
+    data: categories.map(({ id }) => ({ categoryId: id })),
+  });
 }
 
 main()
