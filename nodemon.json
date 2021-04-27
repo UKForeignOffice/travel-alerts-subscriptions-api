@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ext": "ts",
+  "ignore": ["__tests__"],
+  "exec": "node -r ts-node/register/transpile-only --inspect=0.0.0.0 src/index.ts"
+}

@@ -6,16 +6,17 @@
   },
   "description": "Subscriptions API for FCDO Emergency Travel Alerts",
   "scripts": {
+    "setup": "npm run db:setup && npm run start:dev",
     "build": "babel src --out-dir dist --extensions \".ts\"",
     "start:prod": "node dist/index.js",
-    "start:dev": "PORT=3000 NODE_ENV=development node -r ts-node/register/transpile-only --inspect=0.0.0.0 src/index.ts --debug src/index.ts",
+    "start:dev": "nodemon",
     "test": "jest --detectOpenHandles",
     "test:coverage": "jest --coverage",
     "type-check": "tsc --noEmit",
     "lint": "eslint ./src --fix && prettier --write ./src",
-    "db:generate": "prisma generate",
-    "db:migrate": "prisma migrate dev",
-    "db:setup": "npm run db:generate && prisma migrate dev --name init && prisma db seed --preview-feature",
+    "db:generate": "prisma generate --schema ./src/models/db/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema ./src/models/db/schema.prisma",
+    "db:setup": "npm run db:generate && prisma migrate dev --name init --schema ./src/models/db/schema.prisma && prisma db seed --preview-feature --schema ./src/models/db/schema.prisma",
     "prepare": "husky install",
     "precommit": "lint-staged"
   },
@@ -61,15 +62,13 @@
     "celebrate": "^14.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "joi": "^17.4.0"
+    "joi": "^17.4.0",
+    "nodemon": "^2.0.7"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "npm run lint",
       "git add"
     ]
-  },
-  "prisma": {
-    "schema": "./src/models/db/schema.prisma"
   }
 }

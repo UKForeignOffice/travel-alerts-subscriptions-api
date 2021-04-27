@@ -11,6 +11,11 @@ async function main() {
         name: "India",
         slug: "india",
       },
+      {
+        code: "FR",
+        name: "France",
+        slug: "france",
+      },
     ],
   });
   await prisma.channel.createMany({
@@ -47,7 +52,6 @@ async function main() {
 main()
   .catch((e) => {
     logger.error(e);
-    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect();

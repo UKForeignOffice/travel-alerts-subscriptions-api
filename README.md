@@ -20,7 +20,7 @@ A REST API and database to manage:
 ### Prerequisites
 [Docker](https://www.docker.com/products/docker-desktop) should be running
 
-### Set up database
+### Build and run database and API
 
 This will:
 1. Create a [Prisma](https://www.prisma.io/) client and type definitions
@@ -28,22 +28,10 @@ This will:
 3. Seed tables with data
 
 ```
-docker-compose up
-npm i
-npm run db:setup
+docker-compose up --build
 ```
 
-### Run node.js API
-
-Ensure the database is running:
-```
-docker-compose up
-```
-
-Start the app (enables Node debugger):
-```
-npm run start:dev
-```
+The Node debugger is available on port 9229
 
 ### API endpoints
 

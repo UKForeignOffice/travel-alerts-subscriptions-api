@@ -1,8 +1,29 @@
-FROM node:14.16.1-alpine
-RUN mkdir -p /usr/src/app
+FROM node:14.16.1-alpine AS base
+RUN mkdir -p /usr/src/app && \
+    addgroup -g 1001 appuser && \
+    adduser -S -u 1001 -G appuser appuser && \
+    chown -R appuser:appuser /usr/src/app && \
+    chmod -R +x  /usr/src/app && \
+    apk update && \
+    apk upgrade && \
+    apk add --no-cache bash git
+
+FROM base AS dependencies
 WORKDIR /usr/src/app
-COPY package.json package-lock.json babel.config.json tsconfig.json ./
-COPY ./prisma ./prisma/
+COPY --chown=appuser:appuser package.json package-lock.json tsconfig.json babel.config.json  ./
+USER 1001
 RUN npm install
+
+FROM dependencies AS build
+WORKDIR /usr/src/app
+COPY --chown=appuser:appuser ./src ./src/
+USER 1001
+RUN npm run build
+
+FROM build AS runner
+WORKDIR /usr/src/app
+USER 1001
+ARG NODE_ENV
+ENV NODE_ENV=$NODE_ENV
 EXPOSE 3000
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "start:prod"]
