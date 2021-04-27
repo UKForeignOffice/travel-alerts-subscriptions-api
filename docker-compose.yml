@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: subscriptions_database
+    image: "postgres:13.2-alpine"
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+  app:
+    container_name: app
+    environment:
+      - NODE_ENV=development
+      - ERROR_LEVEL=error
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/postgres?schema=public
+    build: .
+    volumes:
+      - ./:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    command: npm run setup
+    depends_on:
+      - postgres
